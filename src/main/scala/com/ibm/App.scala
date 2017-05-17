@@ -29,6 +29,10 @@ object App {
 
     val dataDF = spark.read.json("src/main/resources/data.json")
     dataDF.createOrReplaceTempView("table1")
+    dataDF.rdd.getNumPartitions
+    spark.conf.set("spark.sql.shuffle.partitions", 2000)
+    spark.sqlContext.sql("set spark.sql.shuffle.partitions=10")
+    dataDF.repartition()
 
     dataDF.sqlContext.sql("select * from table1 where dept == 'CS'").show()
 
